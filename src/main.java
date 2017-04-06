@@ -15,8 +15,8 @@ class Example {
 
 
         // Sensitive information
-        final String APIKEY = "cda032a8-f14b-437d-a16d-e3941668ba5f";
-        String summonerName = "ez3real";
+        final String APIKEY = "";
+        String summonerName = "";
 
         // Set the environment
         RiotAPI.setRegion(Region.NA);
