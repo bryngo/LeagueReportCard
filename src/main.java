@@ -30,6 +30,8 @@ class Example {
         List<MatchReference> matchList = summoner.getMatchList();
         Match match;
 
+        System.out.println("=== Here is " + summonerName + "'s ranked match summary since the 2016 Season. ===");
+
         for (MatchReference aMatchList : matchList) {
             match = RiotAPI.getMatch(aMatchList.getID());
 
@@ -91,9 +93,9 @@ class Example {
                 assists + " assists, " +
                 deaths + " deaths on " + date;
         if(matchWon)
-            matchSummary += " . Victory!";
+            matchSummary += ". Victory!";
         else
-            matchSummary += " . Defeat :(";
+            matchSummary += ". Defeat :(";
 
         // return the match summary;
         return matchSummary;
