@@ -19,7 +19,6 @@ class Example {
 
         // Sensitive information
         final String APIKEY = getBryanAPIKey("League");
-        ;
         String summonerName = "Lunoski";
 
         // Set the environment
