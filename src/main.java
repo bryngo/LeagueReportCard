@@ -147,6 +147,7 @@ class Example {
             }
 
 
+            // this should never return error
         return "ERROR";
 
     }
