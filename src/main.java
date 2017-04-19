@@ -33,7 +33,7 @@ class Example {
             // Don't really care about games from 2015 and beyond
             if(getMatchYear(match) < 2016) break;
 
-            System.out.println(getSummonerMatchStats(match, summonerName));
+            System.out.println(getSummonerMatchStats(match, summoner));
 
         }
 
@@ -41,26 +41,43 @@ class Example {
 
     }
 
-    private static String getSummonerMatchStats(Match match, String summonerName) {
+
+
+    private static boolean getMatchOutcome(Match match, int participantID) {
+
+        int teamID;
+
+        if(participantID >= 0 && participantID <= 4)
+            teamID = 0;
+        else teamID = 1;
+
+        return match.getTeams().get(teamID).getWinner();
+    }
+
+    private static String getSummonerMatchStats(Match match, Summoner summoner) {
 
         List<Participant> participants = match.getParticipants();
         ParticipantStats summonerStats;
         String summonerChamp, matchSummary, date;
+        boolean matchWon;
 
         date = match.getCreation().toString();
 
-        int summonerID = 0;
+        int participantID = 0;
 
-        for(; summonerID < 10; summonerID++) {
-            if(summonerName.equals(participants.get(summonerID).getSummonerName()))
+        for(; participantID < 10; participantID++) {
+            if(summoner.getID() == participants.get(participantID).getSummonerID())
                 break;
         }
 
+        matchWon = getMatchOutcome(match, participantID);
+
         long kills, assists, deaths;
 
-        summonerChamp = participants.get(summonerID).getChampion().toString();
+        summonerChamp = participants.get(participantID).getChampion().toString();
 
-        summonerStats = participants.get(summonerID).getStats();
+        summonerStats = participants.get(participantID).getStats();
+
 
         kills = summonerStats.getKills();
         assists = summonerStats.getAssists();
@@ -70,7 +87,10 @@ class Example {
                 kills + " kills, " +
                 assists + " assists, " +
                 deaths + " deaths on " + date;
-
+        if(matchWon)
+            matchSummary += " . Victory!";
+        else
+            matchSummary += " . Defeat :(";
 
         return matchSummary;
     }
