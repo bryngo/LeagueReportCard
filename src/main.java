@@ -8,18 +8,30 @@ import com.robrua.orianna.type.core.summoner.Summoner;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 class Example {
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
+
+        // the list to hold each line of the csv
+        List<String> lines = new ArrayList<>();
+        lines.add("champ,kills,deaths,assists,date,outcome");
 
         // Sensitive information
         final String APIKEY = getBryanAPIKey("League");
-        String summonerName = "Lunoski";
+        String summonerName = "Miyazono Kaori";
+
+        String filename = summonerName + "_matchSummary.csv";
+        Path file = Paths.get(filename);
 
         // Set the environment
         RiotAPI.setRegion(Region.NA);
@@ -30,7 +42,8 @@ class Example {
         List<MatchReference> matchList = summoner.getMatchList();
         Match match;
 
-        System.out.println("=== Here is " + summonerName + "'s ranked match summary since the 2016 Season. ===");
+        System.out.print("Running");
+
 
         for (MatchReference aMatchList : matchList) {
             match = RiotAPI.getMatch(aMatchList.getID());
@@ -38,8 +51,16 @@ class Example {
             // Don't really care about games from 2015 and beyond
             if(getMatchYear(match) < 2016) break;
 
-            System.out.println(getSummonerMatchStats(match, summoner));
+            lines.add(getSummonerMatchStats(match, summoner));
+            System.out.print(".");
 
+        }
+
+        // write to the file
+        try {
+            Files.write(file, lines, Charset.forName("UTF-8"));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         System.out.println("Done!");
@@ -50,6 +71,7 @@ class Example {
 
         int teamID;
 
+        // find out which team the participant was on
         if(participantID >= 0 && participantID <= 4)
             teamID = 0;
         else teamID = 1;
@@ -88,16 +110,18 @@ class Example {
         assists = summonerStats.getAssists();
 
         // construct the match summary string
-        matchSummary = "Champ: " + summonerChamp + ". Got " +
-                kills + " kills, " +
-                assists + " assists, " +
-                deaths + " deaths on " + date;
-        if(matchWon)
-            matchSummary += ". Victory!";
-        else
-            matchSummary += ". Defeat :(";
+        matchSummary = summonerChamp + "," +
+                kills + "," +
+                deaths + "," +
+                assists + "," +
+                date + ",";
 
-        // return the match summary;
+        if(matchWon)
+            matchSummary += "1";
+        else
+            matchSummary += "0";
+
+        // return the match summary in csv format;
         return matchSummary;
     }
 
@@ -120,7 +144,7 @@ class Example {
         // holds the list of api keys
         List<String> records = new ArrayList<String>();
 
-        // open the file and add the keys to the list
+        // open the file and add the keys to a list
         try
         {
             BufferedReader reader = new BufferedReader(new FileReader("/Users/Bryan1/keys.text"));
