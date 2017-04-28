@@ -21,16 +21,15 @@ import java.util.List;
 class Example {
     public static void main(String[] args) {
 
-
         // the list to hold each line of the csv
         List<String> lines = new ArrayList<>();
         lines.add("champ,kills,deaths,assists,date,outcome");
 
         // Sensitive information
         final String APIKEY = getBryanAPIKey("League");
-        String summonerName = "Miyazono Kaori";
+        String summonerName = "crispynoodles";
 
-        String filename = summonerName + "_matchSummary.csv";
+        String filename = summonerName + "_reportCard.csv";
         Path file = Paths.get(filename);
 
         // Set the environment
@@ -43,7 +42,6 @@ class Example {
         Match match;
 
         System.out.print("Running");
-
 
         for (MatchReference aMatchList : matchList) {
             match = RiotAPI.getMatch(aMatchList.getID());
@@ -137,7 +135,7 @@ class Example {
 
         return cal.get(Calendar.YEAR);
 
-    } // method to get the year from a match
+    } // returns the year from a match
 
     private static String getBryanAPIKey(String APIcompany) {
 
