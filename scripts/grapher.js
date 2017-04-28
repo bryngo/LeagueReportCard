@@ -1,4 +1,6 @@
 
+
+// load up the CSV file on load up
 $(document).ready(function() {
     $.ajax({
         type: "GET",
@@ -9,14 +11,26 @@ $(document).ready(function() {
 });
 
 function processData(allText) {
+
+    // separates each of the lines
     var allTextLines = allText.split(/\r\n|\n/);
+
+    // split the header up to get the fields. i.e. champ, Kills, deaths, assits, etc
     var headers = allTextLines[0].split(',');
+
+    // will hold an array of lines
     var lines = [];
 
+    // for each line in the file
     for (var i=1; i<allTextLines.length; i++) {
+
+        // split the line up
         var data = allTextLines[i].split(',');
+
+        // this should always be true
         if (data.length === headers.length) {
 
+            // push each field into the array
             var tarr = [];
             for (var j=0; j<headers.length; j++) {
                 tarr.push(data[j]);
@@ -25,6 +39,7 @@ function processData(allText) {
         }
     }
     // alert(lines);
+
 
     console.log(lines[0][0]);
 }
