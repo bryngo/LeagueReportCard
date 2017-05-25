@@ -4,7 +4,7 @@
 $(document).ready(function() {
     $.ajax({
         type: "GET",
-        url: "BubblyBryan_reportCard.csv",
+        url: "data/BubblyBryan_reportCard.csv",
         dataType: "text",
         success: function(data) {processData(data);}
     });
@@ -15,7 +15,7 @@ function processData(allText) {
     // separates each of the lines
     var allTextLines = allText.split(/\r\n|\n/);
 
-    // split the header up to get the fields. i.e. champ, Kills, deaths, assits, etc
+    // split the header up to get the fields. i.e. champ, Kills, deaths, assists, date, outcome
     var headers = allTextLines[0].split(',');
 
     // will hold an array of lines
@@ -76,6 +76,5 @@ function graphHistograms() {
     var data = [win, lose];
     var layout = {barmode: "stack", title: "BubblyBryan's Stats"};
     Plotly.newPlot("myDiv", data, layout);
-    Plotly.newPlot("bryan", data, layout);
 }
 
